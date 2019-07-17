@@ -13,8 +13,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <img src="{{ asset('images/test.jpeg') }}" alt="">
-                    You are logged in!
+                    You are logged in! {{$s}}
                 </div>
             </div>
         </div>
