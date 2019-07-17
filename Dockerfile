@@ -8,7 +8,21 @@ COPY . /var/www/html/
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 
 # Concatenated RUN commands
-RUN apk add --update bash apache2 php7-apache2 php7-mbstring php7-session php7-json php7-pdo php7-openssl php7-tokenizer php7-pdo php7-pdo_mysql php7-xml php7-simplexml\
+RUN apk add --update \
+    bash \
+    apache2 \
+    php7-apache2 \
+    php7-mbstring \
+    php7-session \
+    php7-json \
+    php7-pdo \
+    php7-openssl \
+    php7-tokenizer \
+    php7-pdo \
+    php7-pdo_mysql \
+    php7-xml \
+    php7-simplexml \
+    php7-dom \
     && chmod -R 777 /var/www/html/storage \
     && chown -R www-data:www-data /var/www/html \
     && mkdir -p /run/apache2 \

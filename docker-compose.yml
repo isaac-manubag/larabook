@@ -36,6 +36,23 @@ services:
         aliases:
           - db
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./run/pma
+    ports:
+      - "9000:80"
+    networks:
+      backend:
+        aliases:
+          - pma
+
 networks:
   backend:
     name: backend-network
