@@ -23,8 +23,6 @@ RUN apk add --update \
   php7-xml \
   php7-simplexml \
   php7-dom \
-  && chmod -R 777 /var/www/html/storage \
-  && chown -R www-data:www-data /var/www/html \
   && mkdir -p /run/apache2 \
   && sed -i '/LoadModule rewrite_module/s/^#//g' /etc/apache2/httpd.conf \
   && sed -i '/LoadModule session_module/s/^#//g' /etc/apache2/httpd.conf \
@@ -52,9 +50,13 @@ RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
 # Launch the httpd in foreground
 CMD rm -rf /run/apache2/* || true && /usr/sbin/httpd -DFOREGROUND
 
-RUN addgroup -g 1000 -S devuser && \
-  adduser -u 1000 -S devuser -G devuser && \
-  chown devuser:devuser /var/www/html -R
+ARG uid
+
+RUN addgroup -g $uid -S devuser \
+  && adduser -u $uid -S devuser -G devuser \
+  && chmod -R 775 /var/www/html/storage \
+  && chmod -R 775 /var/www/html/bootstrap \
+  && chown devuser:devuser /var/www/html -R
 
 # FROM php:7.2-apache
 
