@@ -9,29 +9,29 @@ ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 
 # Concatenated RUN commands
 RUN apk add --update \
-    bash \
-    apache2 \
-    php7-apache2 \
-    php7-mbstring \
-    php7-session \
-    php7-json \
-    php7-pdo \
-    php7-openssl \
-    php7-tokenizer \
-    php7-pdo \
-    php7-pdo_mysql \
-    php7-xml \
-    php7-simplexml \
-    php7-dom \
-    && chmod -R 777 /var/www/html/storage \
-    && chown -R www-data:www-data /var/www/html \
-    && mkdir -p /run/apache2 \
-    && sed -i '/LoadModule rewrite_module/s/^#//g' /etc/apache2/httpd.conf \
-    && sed -i '/LoadModule session_module/s/^#//g' /etc/apache2/httpd.conf \
-    && sed -ri -e 's!/var/www/localhost/htdocs!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/httpd.conf \
-    && sed -i 's/AllowOverride\ None/AllowOverride\ All/g' /etc/apache2/httpd.conf \
-    && docker-php-ext-install pdo_mysql \
-    && rm  -rf /tmp/* /var/cache/apk/*
+  bash \
+  apache2 \
+  php7-apache2 \
+  php7-mbstring \
+  php7-session \
+  php7-json \
+  php7-pdo \
+  php7-openssl \
+  php7-tokenizer \
+  php7-pdo \
+  php7-pdo_mysql \
+  php7-xml \
+  php7-simplexml \
+  php7-dom \
+  && chmod -R 777 /var/www/html/storage \
+  && chown -R www-data:www-data /var/www/html \
+  && mkdir -p /run/apache2 \
+  && sed -i '/LoadModule rewrite_module/s/^#//g' /etc/apache2/httpd.conf \
+  && sed -i '/LoadModule session_module/s/^#//g' /etc/apache2/httpd.conf \
+  && sed -ri -e 's!/var/www/localhost/htdocs!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/httpd.conf \
+  && sed -i 's/AllowOverride\ None/AllowOverride\ All/g' /etc/apache2/httpd.conf \
+  && docker-php-ext-install pdo_mysql \
+  && rm  -rf /tmp/* /var/cache/apk/*
 
 # Register the COMPOSER_HOME environment variable
 ENV COMPOSER_HOME /composer
@@ -51,6 +51,10 @@ RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
 
 # Launch the httpd in foreground
 CMD rm -rf /run/apache2/* || true && /usr/sbin/httpd -DFOREGROUND
+
+RUN addgroup -g 1000 -S devuser && \
+  adduser -u 1000 -S devuser -G devuser && \
+  chown devuser:devuser /var/www/html -R
 
 # FROM php:7.2-apache
 
