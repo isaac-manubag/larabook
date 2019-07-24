@@ -1,5 +1,5 @@
 # PHP Images can be found at https://hub.docker.com/_/php/
-FROM php:7.3-alpine3.9
+FROM php:7.2-alpine3.9
 
 # The application will be copied in /var/www/html and the original document root will be replaced in the apache configuration 
 COPY . /var/www/html/ 
@@ -10,25 +10,34 @@ ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 # Concatenated RUN commands
 RUN apk add --update \
   bash \
-  apache2 \
+  freetype-dev \
+  libjpeg-turbo-dev \
+  libpng-dev \
+  libzip-dev \
+  libxml2-dev \
   php7-apache2 \
   php7-mbstring \
   php7-session \
   php7-json \
   php7-pdo \
+  php7-fileinfo \
+  php7-zip \
   php7-openssl \
   php7-tokenizer \
   php7-pdo \
   php7-pdo_mysql \
   php7-xml \
+  php7-xmlwriter \
   php7-simplexml \
   php7-dom \
+  php7-gd \
   && mkdir -p /run/apache2 \
   && sed -i '/LoadModule rewrite_module/s/^#//g' /etc/apache2/httpd.conf \
   && sed -i '/LoadModule session_module/s/^#//g' /etc/apache2/httpd.conf \
   && sed -ri -e 's!/var/www/localhost/htdocs!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/httpd.conf \
   && sed -i 's/AllowOverride\ None/AllowOverride\ All/g' /etc/apache2/httpd.conf \
-  && docker-php-ext-install pdo_mysql \
+  && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+  && docker-php-ext-install pdo_mysql gd zip xml simplexml dom mbstring xmlwriter fileinfo \
   && rm  -rf /tmp/* /var/cache/apk/*
 
 # Register the COMPOSER_HOME environment variable

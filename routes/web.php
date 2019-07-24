@@ -19,3 +19,4 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/pdf', 'HomeController@viewTestPdf');
+Route::get('/userExport', 'HomeController@export');

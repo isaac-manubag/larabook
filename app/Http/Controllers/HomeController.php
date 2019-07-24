@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Exports\UsersExport;
 use PDF;
+use Excel;
 
 class HomeController extends Controller
 {
@@ -32,5 +34,10 @@ class HomeController extends Controller
         $pdf = PDF::loadView('pdf.testpdf');
 
         return $pdf->stream('test.pdf');
+    }
+
+    public function export() 
+    {
+        return Excel::download(new UsersExport, 'users.xlsx');
     }
 }

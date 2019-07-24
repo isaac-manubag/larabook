@@ -8,16 +8,19 @@ services:
         uid: ${UID}
     container_name: larabook
     environment:
-      - APACHE_RUN_USER=#${UID}
-      - APACHE_RUN_GROUP=#${UID}
+      APACHE_RUN_USER: "#${UID}"
+      APACHE_RUN_GROUP: "#${UID}"
+      VIRTUAL_HOST: local.larabook.com
+      VIRTUAL_PORT: 8000
     volumes:
       - .:/var/www/html
-    ports:
-      - ${HOST_PORT}:80
+    expose:
+      - 80  
     networks:
       backend:
         aliases:
           - larabook
+      default:
 
   mysql-db:
     image: mysql:5.7.22
@@ -56,3 +59,6 @@ services:
 networks:
   backend:
     name: backend-network
+  default:
+    external:
+      name: nginx-proxy
